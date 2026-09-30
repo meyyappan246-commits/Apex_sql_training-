@@ -1,0 +1,105 @@
+import mysql.connector
+
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="sec@123",
+    database="EmployeeDB"
+)
+
+cursor = db.cursor()
+
+print("sucessfully connected")
+
+def add_employee():
+    id = int(input("Enter employeeID: "))
+    name = input("Enter employee Name: ")
+    age = int(input("Enter Age: "))
+    dept = input("Enter Department: ")
+    salary=float(input("Enter salary: "))
+
+    sql = "INSERT INTO employees VALUES (%s, %s, %s, %s,%s)"
+    values = (id, name, age, dept,salary)
+
+    cursor.execute(sql, values)
+    db.commit()
+
+    print("Employee Added Successfully!\n")
+
+add_employee()
+
+def view_employee():
+    cursor.execute("SELECT * FROM employees")
+    records = cursor.fetchall()
+
+    print("\nemployee Records")
+    print("------------------------------")
+
+    for row in records:
+        print(row)
+
+    print()
+
+view_employee()
+
+def update_employee():
+    id = int(input("Enter employee ID: "))
+    new_salary = input("Enter New salary: ")
+
+    sql = "UPDATE employees SET salary=%s WHERE id=%s"
+    values = (new_salary, id)
+
+    cursor.execute(sql, values)3
+    db.commit()
+
+    print("Employee Updated Successfully!\n")
+
+update_employee()
+
+def delete_employee():
+ id = int(input("Enter  ID: "))
+ sql = "DELETE FROM employees WHERE id=%s"
+ cursor.execute(sql, (id,))
+ db.commit()
+ print("Employee Deleted Successfully!\n")
+delete_employee()
+
+while True:
+    print("===== EMPLOYEE MANAGEMENT =====")
+    print("1. Add employee")
+    print("2. View employee")
+    print("3. Update employee")
+    print("4. Delete employee")
+    print("5. Exit")
+
+    choice = input("Enter Choice: ")
+
+    if choice == "1":
+        add_employee()
+
+    elif choice == "2":
+        view_employee()
+
+    elif choice == "3":
+        update_employee()
+
+    elif choice == "4":
+        delete_employee()
+
+    elif choice == "5":
+        print("Program Ended.")
+        break
+
+    else:
+        print("Invalid Choice!\n")
+
+
+# Close connection
+cursor.close()
+db.close()
+
+
+
+
+
+
